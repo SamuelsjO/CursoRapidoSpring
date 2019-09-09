@@ -1,12 +1,15 @@
 package com.backend.projeto.config;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.backend.projeto.entity.Role;
 import com.backend.projeto.entity.User;
 import com.backend.projeto.repository.UserRepository;
 
@@ -16,21 +19,27 @@ public class DataInitalizer implements ApplicationListener<ContextRefreshedEvent
 	@Autowired
 	UserRepository userRepository;
 	
+	@Autowired
+	PasswordEncoder encoder;
 	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		
 		List<User> users = userRepository.findAll();
 		if(users.isEmpty()) {
-			this.createUser("Samuel","faculdadesjs@gmail","12345");
-			this.createUser("Pedro","faculdadesjs@gmail","12345");
-			this.createUser("Vitoria","faculdadesjs@gmail","12345");
+			this.createUser("Samuel","samuel@gmail",encoder.encode("12345"), "ROLE_ALUNO");
+			this.createUser("Pedro","admin@gmail",encoder.encode("12345"), "ROLE_ADMIN");
+			
 		}
 		
 		
 	}
- public void createUser(String name, String email, String password) {
-	 User user = new User(name, email, password);
+ public void createUser(String name, String email, String password, String role) {
+	 
+	 Role roleObjetc = new Role();
+	 roleObjetc.setName(role);
+	 
+	 User user = new User(name, email, password, Arrays.asList(roleObjetc));
 	 userRepository.save(user);
  }
 }
