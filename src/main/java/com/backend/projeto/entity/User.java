@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import org.hibernate.annotations.ManyToAny;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,6 +41,14 @@ public class User {
 
 	}
 
+	public User(User user) {
+		super();
+		this.name = user.getName();
+		this.email = user.getEmail();
+		this.roles = user.getRoles();
+		this.password = user.getPassword();
+		
+	}
 	public User(String name, String email, String password, List<Role> roles) {
 		this.name = name;
 		this.email = email;

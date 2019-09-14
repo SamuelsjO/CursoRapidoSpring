@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.backend.projeto.entity.Role;
 import com.backend.projeto.entity.User;
+import com.backend.projeto.repository.RoleRepository;
 import com.backend.projeto.repository.UserRepository;
 
 @Component
@@ -20,6 +21,9 @@ public class DataInitalizer implements ApplicationListener<ContextRefreshedEvent
 	UserRepository userRepository;
 	
 	@Autowired
+	RoleRepository roleRepository;
+	
+	@Autowired
 	PasswordEncoder encoder;
 	
 	@Override
@@ -27,8 +31,8 @@ public class DataInitalizer implements ApplicationListener<ContextRefreshedEvent
 		
 		List<User> users = userRepository.findAll();
 		if(users.isEmpty()) {
-			this.createUser("Samuel","samuel@gmail",encoder.encode("12345"), "ROLE_ALUNO");
-			this.createUser("Pedro","admin@gmail",encoder.encode("12345"), "ROLE_ADMIN");
+			this.createUser("Samuel","samuel@gmail",encoder.encode("123456"), "ROLE_ALUNO");
+			this.createUser("Pedro","admin@gmail",encoder.encode("123456"), "ROLE_ADMIN");
 			
 		}
 		
@@ -38,6 +42,8 @@ public class DataInitalizer implements ApplicationListener<ContextRefreshedEvent
 	 
 	 Role roleObjetc = new Role();
 	 roleObjetc.setName(role);
+	 
+	 this.roleRepository.save(roleObjetc);
 	 
 	 User user = new User(name, email, password, Arrays.asList(roleObjetc));
 	 userRepository.save(user);
